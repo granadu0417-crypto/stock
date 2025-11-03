@@ -2,6 +2,7 @@
 import hashlib
 import time
 from typing import Optional
+from datetime import datetime
 from kiwoom.client import KiwoomAPIClient
 from utils import setup_logger
 
@@ -26,34 +27,49 @@ class KiwoomAuth(KiwoomAPIClient):
         """
         self.logger.info("접근 토큰 발급 시작")
 
-        endpoint = "/oauth2/tokenP"
+        endpoint = "/oauth2/token"
         data = {
             "grant_type": "client_credentials",
             "appkey": self.app_key,
-            "appsecret": self.app_secret,
+            "secretkey": self.secret_key,
         }
 
         try:
             response = self.session.post(
                 f"{self.base_url}{endpoint}",
                 json=data,
-                headers={"Content-Type": "application/json"},
+                headers={"Content-Type": "application/json;charset=UTF-8"},
                 timeout=30,
             )
             response.raise_for_status()
             result = response.json()
 
+            # 키움증권 응답 체크
+            return_code = result.get("return_code", -1)
+            return_msg = result.get("return_msg", "")
+
+            if return_code != 0:
+                raise Exception(f"토큰 발급 실패: [{return_code}] {return_msg}")
+
             # 토큰 정보 추출
-            self.access_token = result.get("access_token")
-            expires_in = result.get("expires_in", 86400)  # 기본 24시간
+            self.access_token = result.get("token")
+            expires_dt = result.get("expires_dt", "")  # 예: "20241107083713"
 
             if not self.access_token:
                 raise Exception("접근 토큰을 받지 못했습니다.")
 
-            # 토큰 만료 시간 설정
-            self.token_expire_time = time.time() + expires_in
+            # 만료 시간 계산 (expires_dt를 timestamp로 변환)
+            if expires_dt:
+                try:
+                    expire_datetime = datetime.strptime(expires_dt, "%Y%m%d%H%M%S")
+                    self.token_expire_time = expire_datetime.timestamp()
+                except:
+                    # 파싱 실패시 기본 24시간
+                    self.token_expire_time = time.time() + 86400
+            else:
+                self.token_expire_time = time.time() + 86400
 
-            self.logger.info(f"접근 토큰 발급 완료 (유효시간: {expires_in}초)")
+            self.logger.info(f"접근 토큰 발급 완료 (만료: {expires_dt})")
             return self.access_token
 
         except Exception as e:

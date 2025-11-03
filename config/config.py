@@ -12,15 +12,15 @@ class Config:
 
     # 키움증권 API 설정
     KIWOOM_APP_KEY: str = os.getenv('KIWOOM_APP_KEY', '')
-    KIWOOM_APP_SECRET: str = os.getenv('KIWOOM_APP_SECRET', '')
+    KIWOOM_SECRET_KEY: str = os.getenv('KIWOOM_SECRET_KEY', '')
     KIWOOM_ACCOUNT_NUMBER: str = os.getenv('KIWOOM_ACCOUNT_NUMBER', '')
 
     # API 환경 (real: 실거래, mock: 모의투자)
     KIWOOM_ENVIRONMENT: str = os.getenv('KIWOOM_ENVIRONMENT', 'mock')
 
     # 키움증권 REST API 엔드포인트
-    KIWOOM_BASE_URL: str = 'https://openapi.koreainvestment.com:9443'  # 실서버
-    KIWOOM_MOCK_URL: str = 'https://openapivts.koreainvestment.com:29443'  # 모의투자
+    KIWOOM_BASE_URL: str = 'https://api.kiwoom.com'  # 실전투자
+    KIWOOM_MOCK_URL: str = 'https://mockapi.kiwoom.com'  # 모의투자
 
     # 로깅 설정
     LOG_LEVEL: str = os.getenv('LOG_LEVEL', 'INFO')
@@ -37,8 +37,8 @@ class Config:
         """필수 설정 값 검증"""
         if not cls.KIWOOM_APP_KEY:
             raise ValueError("KIWOOM_APP_KEY가 설정되지 않았습니다.")
-        if not cls.KIWOOM_APP_SECRET:
-            raise ValueError("KIWOOM_APP_SECRET이 설정되지 않았습니다.")
+        if not cls.KIWOOM_SECRET_KEY:
+            raise ValueError("KIWOOM_SECRET_KEY가 설정되지 않았습니다.")
         if not cls.KIWOOM_ACCOUNT_NUMBER:
             raise ValueError("KIWOOM_ACCOUNT_NUMBER가 설정되지 않았습니다.")
         return True

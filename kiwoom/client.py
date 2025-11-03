@@ -13,7 +13,7 @@ class KiwoomAPIClient:
         self.logger = setup_logger(__name__)
         self.base_url = Config.get_base_url()
         self.app_key = Config.KIWOOM_APP_KEY
-        self.app_secret = Config.KIWOOM_APP_SECRET
+        self.secret_key = Config.KIWOOM_SECRET_KEY
         self.access_token: Optional[str] = None
         self.session = requests.Session()
 
@@ -30,10 +30,10 @@ class KiwoomAPIClient:
             요청 헤더 딕셔너리
         """
         headers = {
-            "Content-Type": "application/json; charset=utf-8",
+            "Content-Type": "application/json;charset=UTF-8",
             "authorization": f"Bearer {self.access_token}" if self.access_token else "",
             "appkey": self.app_key,
-            "appsecret": self.app_secret,
+            "secretkey": self.secret_key,
             "tr_id": tr_id,
         }
         return headers

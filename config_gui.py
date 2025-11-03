@@ -26,7 +26,7 @@ class ConfigGUI:
         """기존 .env 파일에서 설정 로드"""
         self.config = {
             "KIWOOM_APP_KEY": "",
-            "KIWOOM_APP_SECRET": "",
+            "KIWOOM_SECRET_KEY": "",
             "KIWOOM_ACCOUNT_NUMBER": "",
             "KIWOOM_ENVIRONMENT": "mock",
             "LOG_LEVEL": "INFO",
@@ -66,13 +66,13 @@ class ConfigGUI:
         self.app_key_entry.grid(row=1, column=1, pady=5)
         self.app_key_entry.insert(0, self.config["KIWOOM_APP_KEY"])
 
-        # App Secret
-        ttk.Label(main_frame, text="App Secret:", font=("Arial", 10)).grid(
+        # Secret Key
+        ttk.Label(main_frame, text="Secret Key:", font=("Arial", 10)).grid(
             row=2, column=0, sticky=tk.W, pady=5
         )
-        self.app_secret_entry = ttk.Entry(main_frame, width=40, show="*")
-        self.app_secret_entry.grid(row=2, column=1, pady=5)
-        self.app_secret_entry.insert(0, self.config["KIWOOM_APP_SECRET"])
+        self.secret_key_entry = ttk.Entry(main_frame, width=40, show="*")
+        self.secret_key_entry.grid(row=2, column=1, pady=5)
+        self.secret_key_entry.insert(0, self.config["KIWOOM_SECRET_KEY"])
 
         # 계좌번호
         ttk.Label(main_frame, text="계좌번호:", font=("Arial", 10)).grid(
@@ -153,7 +153,7 @@ class ConfigGUI:
     def save_config(self):
         """설정 저장"""
         app_key = self.app_key_entry.get().strip()
-        app_secret = self.app_secret_entry.get().strip()
+        secret_key = self.secret_key_entry.get().strip()
         account = self.account_entry.get().strip()
         environment = self.env_var.get()
         log_level = self.log_level_var.get()
@@ -162,8 +162,8 @@ class ConfigGUI:
         if not app_key:
             messagebox.showerror("오류", "App Key를 입력해주세요.")
             return
-        if not app_secret:
-            messagebox.showerror("오류", "App Secret을 입력해주세요.")
+        if not secret_key:
+            messagebox.showerror("오류", "Secret Key를 입력해주세요.")
             return
         if not account:
             messagebox.showerror("오류", "계좌번호를 입력해주세요.")
@@ -186,7 +186,7 @@ class ConfigGUI:
             with open(self.env_path, "w", encoding="utf-8") as f:
                 f.write("# 키움증권 REST API 설정\n")
                 f.write(f"KIWOOM_APP_KEY={app_key}\n")
-                f.write(f"KIWOOM_APP_SECRET={app_secret}\n")
+                f.write(f"KIWOOM_SECRET_KEY={secret_key}\n")
                 f.write(f"KIWOOM_ACCOUNT_NUMBER={account}\n")
                 f.write(f"\n# API 환경 설정 (real: 실거래, mock: 모의투자)\n")
                 f.write(f"KIWOOM_ENVIRONMENT={environment}\n")
