@@ -10,6 +10,7 @@
 - 📈 주문 기능 (매수/매도/정정/취소)
 - 🤖 자동매매 전략 프레임워크
 - 📝 상세한 로깅 및 에러 처리
+- 🖥️ GUI 인터페이스 (설정 및 메인 화면)
 
 ## 프로젝트 구조
 
@@ -19,6 +20,9 @@ stock/
 ├── requirements.txt         # Python 패키지 의존성
 ├── .gitignore              # Git 제외 파일
 ├── .env.example            # 환경변수 예제
+├── config_gui.py           # GUI 설정 프로그램
+├── main_gui.py             # GUI 메인 프로그램
+├── main.py                 # CLI 메인 프로그램
 ├── config/
 │   └── config.py           # 설정 파일
 ├── kiwoom/
@@ -30,11 +34,11 @@ stock/
 │   └── order.py            # 주문 기능
 ├── strategy/
 │   ├── __init__.py
-│   └── base_strategy.py    # 전략 베이스 클래스
-├── utils/
-│   ├── __init__.py
-│   └── logger.py           # 로깅 유틸
-└── main.py                 # 메인 실행 파일
+│   ├── base_strategy.py    # 전략 베이스 클래스
+│   └── simple_strategy.py  # 이동평균 전략 예제
+└── utils/
+    ├── __init__.py
+    └── logger.py           # 로깅 유틸
 ```
 
 ## 시작하기
@@ -62,6 +66,16 @@ pip install -r requirements.txt
 
 ### 3. 환경 설정
 
+#### GUI로 설정 (추천! 🎨)
+
+```bash
+python config_gui.py
+```
+
+GUI 화면에서 App Key, App Secret, 계좌번호를 입력하고 저장하세요.
+
+#### 또는 수동 설정
+
 `.env.example` 파일을 복사하여 `.env` 파일을 생성하고 필요한 정보를 입력합니다.
 
 ```bash
@@ -76,6 +90,14 @@ KIWOOM_ACCOUNT_NUMBER=your_account_number_here
 ```
 
 ### 4. 실행
+
+#### GUI 버전 (추천! 🖥️)
+
+```bash
+python main_gui.py
+```
+
+#### CLI 버전
 
 ```bash
 python main.py
